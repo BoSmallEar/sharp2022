@@ -7,7 +7,7 @@ Team Rayee, ranks **1st** place in reconstructing partial textured objects (trac
 
 This repository contains the implementation of the following techinical report:
 
-[**3D Textured Shape Recovery with Learned Geometric Priors**](media/3D_Textured_Shape_Recovery_with_Learned_Geometric_Priors.pdf)
+[**3D Textured Shape Recovery with Learned Geometric Priors**](https://arxiv.org/abs/2209.03254)
 
 Lei Li*, Zhizheng Liu*, Weining Ren*, Liudi Yang*, Fangjinhua Wang, Marc Pollefeys and Songyou Peng (* denotes equal contribution).
 
@@ -21,8 +21,11 @@ If you find our code or report useful, please consider citing
 ```
 
 
-> This project is adapted from the code for [Implict Feature Networks](https://virtualhumans.mpi-inf.mpg.de/ifnets/) by [Chibane et. al. CVPR'20], and uses libraries for [Occupancy Networks](https://github.com/autonomousvision/occupancy_networks) by [Mescheder et. al. CVPR'19] 
-> and the ShapeNet data preprocessed for [DISN](https://github.com/Xharlie/DISN) by [Xu et. al. NeurIPS'19], please cite them if you use our code.
+> This project is built upon the code for the following awesome projects:
+- [Implict Feature Networks](https://virtualhumans.mpi-inf.mpg.de/ifnets/) by [Chibane et. al. CVPR'20]
+- [Convolutional Occupancy Networks](https://github.com/autonomousvision/convolutional_occupancy_networks) by [Peng et. al. ECCV'20] 
+- [SMPL](https://smpl.is.tue.mpg.de/) model by [Loper et. al. SIGGRAPH Asia'15] and its [PyTorch extension](https://github.com/gulvarol/smplpytorch)
+> Please cite them if you use our code.
 ## Installation
 
 Please clone the repository and navigate into it in your terminal, its location is assumed for all subsequent commands. We use `pytorch 1.8.1` with `cuda 10.2` to build the environment, please install the following dependencies 
