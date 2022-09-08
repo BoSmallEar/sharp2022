@@ -16,12 +16,14 @@ If you find our code or report useful, please consider citing
 @article{Li2022SHARP,
  author = {Lei Li, Zhizheng Liu, Weining Ren, Liudi Yang, Fangjinhua Wang, Marc Pollefeys and Songyou Peng},
  title  = {3D Textured Shape Recovery with Learned Geometric Priors},
- journal= {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) Workshops},
- year   = {2022}}
+ journal= {ArXiv},
+ year   = {2022},
+ volume = {abs/2209.03254}
+ }
 ```
 
 
-> This project is built upon the code for the following awesome projects:
+> Our project is built upon the following awesome projects:
 - [Implict Feature Networks](https://virtualhumans.mpi-inf.mpg.de/ifnets/) by [Chibane et. al. CVPR'20]
 - [Convolutional Occupancy Networks](https://github.com/autonomousvision/convolutional_occupancy_networks) by [Peng et. al. ECCV'20] 
 - [SMPL](https://smpl.is.tue.mpg.de/) model by [Loper et. al. SIGGRAPH Asia'15] and its [PyTorch extension](https://github.com/gulvarol/smplpytorch)
