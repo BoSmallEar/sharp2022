@@ -74,17 +74,6 @@ class GeometryGenerationCallback(Callback):
 
         mesh.export(file_out_path + f'{filename_partial}_reconstruction.obj')
 
-        # if os.path.exists(file_out_path + f'{gt_file_name}-completed.obj'):
-        #     print('Path exists - skip! {}'.format(gt_file_name))
-        #     return
-
-        # mesh = self.mesh_from_logits(logits)
-
-        # if not os.path.exists(file_out_path):
-        #     os.makedirs(file_out_path)
-
-        # mesh.export(file_out_path + f'{gt_file_name}-completed.obj')
-
     def mesh_from_logits(self, logits):
         logits = np.reshape(logits, (self.resolution,) * 3)
 

@@ -51,11 +51,6 @@ def focal_loss(pred, gt, balance=False):
 
     return loss
 
-    # if num_pos == 0:
-    #     loss = loss - neg_loss
-    # else:
-    #     loss = loss - (pos_loss + neg_loss) / num_pos
-
 
 class IFNetTrainer(LightningModule):
     def __init__(self, cfg):
@@ -182,11 +177,7 @@ class IFNetTrainer(LightningModule):
 
 class TextureTrainer(IFNetTrainer):
     def compute_loss(self, batch):
-        # p = batch.get('grid_coords')
         gt_rgb = batch.get('rgb')
-        # inputs = batch.get('inputs')
-
-        # print(p[:,:3])
         pred_rgb = self.model(batch)
         pred_rgb = pred_rgb.transpose(-1, -2)
         # print(gt_rgb.shape)
@@ -199,11 +190,8 @@ class TextureTrainer(IFNetTrainer):
         return {"rgb_loss": loss}, {"occ_accuracy": 1}
 
     def compute_score(self, batch):
-        # p = batch.get('grid_coords')
         gt_rgb = batch.get('rgb')
-        # inputs = batch.get('inputs')
 
-        # print(p[:,:3])
         pred_rgb = self.model(batch)
         pred_rgb = pred_rgb.transpose(-1, -2)
         # print(gt_rgb.shape)
@@ -271,14 +259,6 @@ class GeometryTrainer(IFNetTrainer):
             # loss_i = torch.sum(-labels * torch.log(pred) * (1-pred)**2, dim=-1)
             loss_i = focal_loss(pred, labels, self.balanced_loss)
 
-        # weights = torch.ones_like(occ)
-        # w_negative = occ.mean()
-        # w_positive = 1 - w_negative
-
-        # weights[occ < 0.5] = w_negative
-        # weights[occ >= 0.5] = w_positive
-        # loss_i = loss_i * weights
-        # # w_class_loss = torch.mean(weights * class_loss)
 
         if not self.focal_loss and self.balanced_loss:
             weights = torch.ones_like(occ)
@@ -453,19 +433,6 @@ class GeometryTrainer(IFNetTrainer):
         inputs = batch['inputs']
         logits_list = []
 
-        ##
-        # path = batch['path'][0]
-        # path = os.path.normpath(path)
-        # gt_file_name = path.split(os.sep)[-2]
-        # filename_partial = os.path.splitext(path.split(os.sep)[-1])[0]
-
-        # file_out_path = '/itet-stor/leilil/net_scratch/if-net/3dv/experiments/IFNetGeometrySMPLGT_EarlyFusion/estimated_smpl_128_balanced_loss/geometry_reconstruction' + \
-        #     '/{}/'.format(gt_file_name)
-
-        # if os.path.exists(file_out_path + f'{filename_partial}_reconstruction.obj'):
-        #     print('Path exists - skip! {}'.format(file_out_path))
-        #     return
-
         for points in grid_points_split:
             with torch.no_grad():
                 batch['grid_coords'] = points
@@ -534,15 +501,6 @@ class GeometryTrainer_Pose(IFNetTrainer):
         # loss_p = mse(pose_pred, pose_gt)  # MSE loss
         loss_p = torch.norm(pose_gt-pose_pred, p=1,
                             dim=[-1, -2]).mean()  # L1 loss
-        # loss_i = F.binary_cross_entropy_with_logits(
-        # logits, occ, reduction='none')# out = (B,num_points) by componentwise comparing vecots of size num_samples:
-        # l(logits[n],occ[n]) for each n in B. i.e. l(logits[n],occ[n]) is vector of size num_points again.
-
-        # loss_i = loss_i.sum(-1).mean() # loss_i summed over all #num_samples samples -> out = (B,1) and mean over batch -> out = (1)
-
-        # occ_accuracy = logits >=0
-        # occ_accuracy = occ_accuracy.int() == occ.int()
-        # occ_accuracy = occ_accuracy.float().mean()
 
         # TODO: loss weight
 

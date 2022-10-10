@@ -1,3 +1,4 @@
+import mesh_to_sdf
 from scipy.spatial import cKDTree as KDTree
 import numpy as np
 import trimesh
@@ -13,9 +14,9 @@ import data_processing.utils as utils
 import os
 import mcubes
 os.environ['PYOPENGL_PLATFORM'] = 'egl'
-import mesh_to_sdf
 
 ROOT = 'shapenet/data/'
+
 
 def scale_to_unit_cube(mesh):
     mesh_min = bbox[::2]
@@ -27,8 +28,10 @@ def scale_to_unit_cube(mesh):
 
 def mesh_to_voxels(mesh, voxel_resolution=64, surface_point_method='scan', sign_method='normal', scan_count=100, scan_resolution=400, sample_point_count=10000000, normal_sample_count=11, pad=False, check_result=False, return_gradients=False):
     mesh = scale_to_unit_cube(mesh)
-    surface_point_cloud = mesh_to_sdf.get_surface_point_cloud(mesh, surface_point_method, 3**0.5, scan_count, scan_resolution, sample_point_count, sign_method=='normal')
-    return surface_point_cloud.get_voxels(voxel_resolution, sign_method=='depth', normal_sample_count, pad, check_result, return_gradients)
+    surface_point_cloud = mesh_to_sdf.get_surface_point_cloud(
+        mesh, surface_point_method, 3**0.5, scan_count, scan_resolution, sample_point_count, sign_method == 'normal')
+    return surface_point_cloud.get_voxels(voxel_resolution, sign_method == 'depth', normal_sample_count, pad, check_result, return_gradients)
+
 
 def voxelized_sdf_sampling(path):
     try:
@@ -40,14 +43,15 @@ def voxelized_sdf_sampling(path):
         if not args.smpl:
             out_file = os.path.dirname(path) + '/{}_voxelized_sdf_res{}_points{}_bbox{}.npz'\
                 .format(full_file_name, res, num_points, bbox_str)
-        else: 
+        else:
             if split_name == "train_partial":
                 split_name = "train_smpl"
-            elif  split_name == "test_partial":
+            elif split_name == "test_partial":
                 split_name = "test_smpl"
 
             smpl_file_name = f"{gt_file_name}_pose_smpl_model.obj"
-            smpl_path = os.path.join(cfg["data_path"], split_name, gt_file_name, smpl_file_name)
+            smpl_path = os.path.join(
+                cfg["data_path"], split_name, gt_file_name, smpl_file_name)
             out_file = os.path.dirname(path) + '/{}_voxelized_sdf_res{}_points{}_bbox{}_smpl.npz'\
                 .format(full_file_name, res, num_points, bbox_str)
 
@@ -55,18 +59,19 @@ def voxelized_sdf_sampling(path):
             print('File exists. Done.')
             return
 
-
         mesh = utils.as_mesh(trimesh.load(path))
-        sdf = mesh_to_voxels(mesh, voxel_resolution=128, surface_point_method='sample')
+        sdf = mesh_to_voxels(mesh, voxel_resolution=128,
+                             surface_point_method='sample')
         vertices, triangles = mcubes.marching_cubes(sdf, 0)
-        mesh =  trimesh.Trimesh(vertices, triangles)
+        mesh = trimesh.Trimesh(vertices, triangles)
         mesh.export('test_sdf.obj')
 
-        np.savez(out_file, sdf = sdf, res = res)
+        np.savez(out_file, sdf=sdf, res=res)
         print('Finished {}'.format(path))
 
     except Exception as err:
         print('Error with {}: {}'.format(path, traceback.format_exc()))
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -90,11 +95,9 @@ if __name__ == '__main__':
     kdtree = KDTree(grid_points)
 
     print('Fining all input partial paths for voxelization.')
-    paths = glob(cfg['data_path'] + cfg['preprocessing']['voxelized_pointcloud_sampling']['input_files_regex'])
+    paths = glob(cfg['data_path'] + cfg['preprocessing']
+                 ['voxelized_pointcloud_sampling']['input_files_regex'])
 
-    #debug
-    voxelized_sdf_sampling("dataset/SHARP2022/train/170410-011-a-ftrm-34b3-low-res-result/170410-011-a-ftrm-34b3-low-res-result_normalized.obj")
-    
     print('Start voxelization.')
     p = Pool(mp.cpu_count())
     for _ in tqdm.tqdm(p.imap_unordered(voxelized_sdf_sampling, paths), total=len(paths)):
