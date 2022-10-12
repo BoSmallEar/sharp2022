@@ -12,8 +12,8 @@
     "USE_GPU": 0,
     "DATASET": {
         "NAME": "SHARP",
-        "PATH": "/scratch-second/3dv/SHARP2022/train_smpl",
-        "TARGET_PATH": "/scratch-second/3dv/SHARP2022/train_smpl",
+        "PATH": "dataset/SHARP2022/challenge1/track1/train_smpl",
+        "TARGET_PATH": "dataset/SHARP2022/challenge1/track1/train_smpl",
         "DATA_MAP":  [
               [
               0,

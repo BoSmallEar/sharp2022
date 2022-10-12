@@ -36,7 +36,7 @@ def parse_args():
 
 
 def get_config(args):
-    config_path = 'configs/{}.json'.format(args.dataset_name)
+    config_path = 'config/{}.json'.format(args.dataset_name)
     with open(config_path, 'r') as f:
         data = json.load(f)
     cfg = edict(data.copy())

@@ -84,11 +84,11 @@ Next, we create the input for the texture network (a colored, incomplete shape a
 python src/data_processing/sample_voxelized_colored_pointcloud.py config/SHARP2022_texture/track1_texture.yaml
 ```
 
-To generate SMPL models and meshes of the predicted poses for shape fusion, run
+To generate SMPL models and meshes of the predicted poses for shape fusion, first create a folder `smpl_models` and [download](https://smpl.is.tue.mpg.de) the SMPL base models to that folder, and move all the predicted poses to `dataset/SHARP2022/challenge1/track1/train_smpl`, then run
 
 ```
-python src/data_processing/smpl_tools/pose2smpl.py config/SHARP2022_texture/track1_texture.yaml
-python src/data_processing/smpl_tools/smpl2obj.py config/SHARP2022_texture/track1_texture.yaml
+python src/data_processing/smpl_tools/pose2smpl.py SHARP
+python src/data_processing/smpl_tools/smpl2obj.py SHARP
 ```
 
 Finally, a data split into training, test and validation is created with

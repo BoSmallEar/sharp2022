@@ -10,7 +10,7 @@ import argparse
 
 
 def get_config(args):
-    config_path = 'configs/{}.json'.format(args.dataset_name)
+    config_path = 'config/{}.json'.format(args.dataset_name)
     with open(config_path, 'r') as f:
         data = json.load(f)
     cfg = edict(data.copy())
@@ -39,7 +39,7 @@ if __name__ == "__main__":
         pose_pca = np.array(param['pose_params'][0])[3:]
         shape =  np.array(param['shape_params'][0])
         pose_glb = np.zeros([1, 3])
-        mesh = KinematicModel("/itet-stor/liuzhi/net_scratch/smpl_models/smpl_neutral.pkl", SMPLArmature, scale=1)
+        mesh = KinematicModel("smpl_models/smpl_neutral.pkl", SMPLArmature, scale=1)
         _, keypoints = mesh.set_params(pose_pca=pose_pca, pose_glb=pose_glb)
         # compute offset
         target_id = 12 # use neck
